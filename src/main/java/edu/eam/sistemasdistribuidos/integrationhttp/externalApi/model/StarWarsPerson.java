@@ -2,7 +2,9 @@ package edu.eam.sistemasdistribuidos.integrationhttp.externalApi.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class StarWarsPerson {
+import java.io.Serializable;
+
+public class StarWarsPerson implements Serializable {
 
     private String name;
 

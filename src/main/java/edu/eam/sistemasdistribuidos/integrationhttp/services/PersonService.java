@@ -5,6 +5,8 @@ import edu.eam.sistemasdistribuidos.integrationhttp.externalApi.services.StarWar
 import edu.eam.sistemasdistribuidos.integrationhttp.model.entities.Person;
 import edu.eam.sistemasdistribuidos.integrationhttp.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -34,5 +36,17 @@ public class PersonService {
                 starWarsPerson.getGender(),
                 starWarsPerson.getBirthYear(),
                 starWarsPerson.getHomeWorld()));
+    }
+
+
+    @Cacheable(value = "findPersonFromBD", key = "#id", cacheManager = "expire5mins")
+    public Person buscarDesdeBD(String id) {
+        System.out.println("buscarDesdeBD:" + id);
+        return personRepository.findById(id).get();
+    }
+
+    @CacheEvict(value = "findPersonFromBD", key ="#p.id")
+    public void editarPerson(Person p) {
+        personRepository.save(p);
     }
 }
